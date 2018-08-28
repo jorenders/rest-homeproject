@@ -1,0 +1,81 @@
+<html>
+  <head>
+    <!--Load the AJAX API-->
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script th:inline="javascript">
+      /*<![CDATA[*/
+
+      // Load the Visualization API and the corechart package.
+      google.charts.load('current', {'packages':['corechart', 'line']});
+
+      // Set a callback to run when the Google Visualization API is loaded.
+
+      google.charts.setOnLoadCallback(drawChart);	
+      google.charts.setOnLoadCallback(drawSingleLineChart(JSON.parse([[${linedata}]])));
+	  
+
+      // Callback that creates and populates a data table,
+      // instantiates the pie chart, passes in the data and
+      // draws it.
+      function drawChart() {
+
+        // Create the data table.
+        var dataCircle = new google.visualization.DataTable();
+        //var data =  google.visualization.arrayToDataTable(${metingen});
+        dataCircle.addColumn('string', 'Topping');
+        dataCircle.addColumn('number', 'Slices');
+        dataCircle.addRows([
+          ['0-8', [[${intzeroto8}]]],
+          ['8-12', [[${int8to12}]]],
+          ['12-16', [[${int12to16}]]],
+          ['16-20', [[${int16to20}]]],
+          ['20-24', [[${int20to24}]]]
+        ]);
+
+        // Set chart options
+        var optionsPie = {'title':'Temperatuur vandaag per tijdspanne',
+                       'width':400,
+                       'height':300};
+
+        // Instantiate and draw our chart, passing in some options.
+        var chart = new google.visualization.PieChart(document.getElementById('chartCircle_div'));
+        chart.draw(dataCircle, optionsPie);
+      }
+      
+      function drawSingleLineChart(linedata) {
+      		  alert(linedata);
+		      //var data = new google.visualization.DataTable();
+		      var data = new google.visualization.DataTable();
+		      
+		      
+		      data.addColumn('number', 'X');
+		      data.addColumn('number', 'Keuken');
+		      data.addColumn('number', 'Terras');
+		
+		      data.addRows(linedata);
+		
+		      var options = {
+		        hAxis: {
+		          title: 'Time'
+		        },
+		        vAxis: {
+		          title: 'Temperatuur'
+		        }
+		       };
+
+      		  var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
+              chart.draw(data, options);
+       }      
+      /*]]>*/
+    </script>
+  </head>
+
+  <body>
+  	<p th:text="'Hello, ' + ${name} + '!'" />
+  	<p th:text="'Hello, ' + ${intzeroto8} + '!'" />
+  	<p th:text="'Hello, ' + ${linedata}" />
+    <!--Div that will hold the pie chart-->
+    <div id="chart_div"></div>
+    <div id="chartCircle_div"></div>
+  </body>
+</html>
