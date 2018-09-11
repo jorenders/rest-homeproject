@@ -25,10 +25,11 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @ComponentScan(basePackages = "be.renders.homeproject")
 public class RestHomeprojectApplication extends SpringBootServletInitializer {
 
-	@Override
+
+	/*@Override
     protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
         return application.sources(RestHomeprojectApplication.class);
-    }
+    }*/
 	
 	public static void main(String[] args) {
 		SpringApplication.run(RestHomeprojectApplication.class, args);

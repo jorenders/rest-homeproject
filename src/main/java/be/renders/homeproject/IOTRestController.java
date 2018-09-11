@@ -3,6 +3,8 @@ package be.renders.homeproject;
 import java.util.Date;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -29,6 +31,8 @@ public class IOTRestController {
 
 	@Autowired
 	ConfiguratieRepository configuratieRepository;
+
+	Logger logger = LoggerFactory.getLogger(IOTRestController.class);
 	
 	@ApiOperation(value = "Registreer een meting voor een bepaalde sensor")
     @RequestMapping(value = "/registreerMeting", produces = "application/json", method = RequestMethod.GET)
@@ -91,7 +95,16 @@ public class IOTRestController {
     	List<Meting> metingen = metingRepository.getMeting(miliseconds);
         return metingen;
     }
-    
+
+	@ApiOperation(value = "Sla logging op van sensor")
+	@RequestMapping(value = "/registreerLogging", produces = "application/json", method = RequestMethod.GET)
+	public Respons registreerlogging(@RequestParam(value="logging", defaultValue="") String logging) {
+		Respons respons = new Respons(ResponseCode.KAN_LOGGING_NIET_WEGSCHRIJVEN);
+		logger.info(logging);
+		respons.setResponsCode(ResponseCode.OK);
+		respons.setResponsString("");
+		return respons;
+	}
 	
     @RequestMapping(value = "/piechart", method = RequestMethod.GET)
 	public String drawPieChart(ModelMap model)
