@@ -98,32 +98,11 @@ public class IOTRestController {
 
 	@ApiOperation(value = "Sla logging op van sensor")
 	@RequestMapping(value = "/registreerLogging", produces = "application/json", method = RequestMethod.GET)
-	public Respons registreerlogging(@RequestParam(value="logging", defaultValue="") String logging) {
+	public Respons registreerLogging(@RequestParam(value="logging", defaultValue="") String logging) {
 		Respons respons = new Respons(ResponseCode.KAN_LOGGING_NIET_WEGSCHRIJVEN);
 		logger.info(logging);
 		respons.setResponsCode(ResponseCode.OK);
 		respons.setResponsString("");
 		return respons;
-	}
-	
-    @RequestMapping(value = "/piechart", method = RequestMethod.GET)
-	public String drawPieChart(ModelMap model)
-	{
-		Slice s1 = Slice.newSlice(15, Color.newColor("CACACA"), "Mac", "Mac");
-		Slice s2 = Slice.newSlice(50, Color.newColor("DF7417"), "Window",
-				"Window");
-		Slice s3 = Slice.newSlice(25, Color.newColor("951800"), "Linux",
-				"Linux");
-		Slice s4 = Slice.newSlice(10, Color.newColor("01A1DB"), "Others",
-				"Others");
-
-		PieChart pieChart = GCharts.newPieChart(s1, s2, s3, s4);
-		pieChart.setTitle("Google Pie Chart", Color.BLACK, 15);
-		pieChart.setSize(720, 360);
-		pieChart.setThreeD(true);
-
-		model.addAttribute("pieUrl", pieChart.toURLString());
-
-		return "display";
 	}
 }
