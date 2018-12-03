@@ -1,9 +1,5 @@
 package be.renders.homeproject;
 
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 public class IOTGuiController {
 	@Autowired
-	MetingRepository metingRepository;
+	HomeProjectRepository metingRepository;
 	
 	@GetMapping("/grafiekTemperatuur")
     public String greeting(@RequestParam(name="name", required=false, defaultValue="World") String name, Model model) {
@@ -29,7 +25,7 @@ public class IOTGuiController {
         Integer int8to12 = 2;
         Integer int12to16 = 1;
         Integer int16to20 = 3;
-        Integer int20to24 = 2;
+        Integer int20to24 = 20;
         
         model.addAttribute("intzeroto8", intzeroto8);
         model.addAttribute("int8to12", int8to12);
