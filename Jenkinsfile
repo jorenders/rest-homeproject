@@ -3,7 +3,7 @@ pipeline {
   stages {
     stage('Check-Out') {
       steps {
-        echo 'Begin pipeline '
+        git(url: 'https://github.com/jorenders', branch: 'rest-homeproject', poll: true)
       }
     }
   }
