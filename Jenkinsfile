@@ -9,7 +9,7 @@ pipeline {
     stage('Unit Tests') {
       steps {
         bat 'echo %PATH%'
-        bat 'mvn clean install -Dmaven.test.failure.ignore=true'
+        bat 'mvn clean install test -Dmaven.test.failure.ignore=true'
       }
     }
     stage('Report') {
