@@ -8,6 +8,7 @@ pipeline {
     }
     stage('Unit Tests') {
       steps {
+        bat 'echo %PATH%'
         bat 'mvn clean'
       }
     }
