@@ -22,5 +22,15 @@ pipeline {
         archiveArtifacts 'target/*.jar,target/*.tar'
       }
     }
+    stage('Delete workspace') {
+      steps {
+        cleanWs(deleteDirs: true)
+      }
+    }
+    stage('Mail') {
+      steps {
+        mail(subject: 'Jenkins build', from: 'desktop-renders@jenkins.com', to: 'jo.renders@gmail.com', body: 'Er is een build gerund')
+      }
+    }
   }
 }
