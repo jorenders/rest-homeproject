@@ -9,7 +9,17 @@ pipeline {
     stage('Unit Tests') {
       steps {
         bat 'echo %PATH%'
-        bat 'mvn clean'
+        bat 'mvn clean install -Dmaven.test.failure.ignore=true'
+      }
+    }
+    stage('Report') {
+      steps {
+        junit 'surefire-reports/**/*.xml'
+      }
+    }
+    stage('Archive Artifacts') {
+      steps {
+        archiveArtifacts 'target/*.jar,target/*.tar'
       }
     }
   }
