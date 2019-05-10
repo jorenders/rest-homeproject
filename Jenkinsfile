@@ -14,7 +14,7 @@ pipeline {
     }
     stage('Report') {
       steps {
-        junit 'surefire-reports/**/*.xml'
+        junit 'target/surefire-reports/**/*.xml'
       }
     }
     stage('Archive Artifacts') {
