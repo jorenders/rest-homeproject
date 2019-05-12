@@ -32,7 +32,6 @@ pipeline {
       }
     }
   }
-
   post {
     success {
       mail(subject: 'Jenkins build SUCCESS', from: 'desktop-renders@jenkins.com', to: 'jo.renders@gmail.com', body: 'Er is succesvolle build gerund')
