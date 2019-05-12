@@ -35,7 +35,7 @@ public class IOTRestController {
 		Respons result = new Respons(ResponseCode.OK);
 		
     	if (macAdres == null) {
-    		result = new Respons(ResponseCode.MACADRES_FOUTIEF, "Meetwaarde is ongekend (null)");
+    		result = new Respons(ResponseCode.MACADRES_FOUTIEF, "MAC Adres is ongekend (null)");
     		return result;
     	}
     	
@@ -82,7 +82,7 @@ public class IOTRestController {
 		
 		Respons respons = new Respons(ResponseCode.OK);
 		ResponseCode responseCode = authenticatieRepository.checkModule(macAdres);
-		
+
 		if (!ResponseCode.MODULE_GEKEND.equals(responseCode)) {
 			respons.setResponsCode(responseCode);
 		}

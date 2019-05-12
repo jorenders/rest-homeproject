@@ -51,4 +51,30 @@ public class IOTRestControllerTests {
 		assertEquals(ResponseCode.SENSOR_WAARDE_FOUTIEF, respons.getResponsCode());
 		assertEquals("Sensorwaarde is ongekend (null)", respons.getResponsString());
 	}
+
+	@Test
+	public void registreerMetingGeeftMeetWaardeFoutiefResponsTerugAlsMeetWaardeNullIs() {
+		Long sensorId = 1L;
+		Double metingWaarde = null;
+		String macAdress = "0D-73-ED-0A-27-44";
+		doReturn(ResponseCode.OK).when(authenticatieRepository).checkModule(macAdress);
+
+		Respons respons = iotRestController.registreerMeting(sensorId, metingWaarde, macAdress);
+		assertEquals(ResponseCode.MEETWAARDE_FOUTIEF, respons.getResponsCode());
+		assertEquals("Meetwaarde is ongekend (null)", respons.getResponsString());
+	}
+
+	@Test
+	public void registreerMetingGeeftFoutAlsMacAdressNietGekendIs() {
+		Long sensorId = null;
+		Double metingWaarde = 2.22;
+		String macAdress = "0D-73-ED-0A-27-88";
+		doReturn(ResponseCode.MODULE_NIET_GEKEND).when(authenticatieRepository).checkModule(macAdress);
+
+		Respons respons = iotRestController.registreerMeting(sensorId, metingWaarde, macAdress);
+		assertEquals(ResponseCode.MODULE_NIET_GEKEND, respons.getResponsCode());
+		assertEquals("Module is ongekend (null), fout bij authenticatie", respons.getResponsString());
+	}
+
+
 }
