@@ -31,4 +31,10 @@ public class IOTRestControllerTests {
 		assertEquals("succes", respons.getResponsString());
 	}
 
+	@Test
+	public void registreerMetingGeeftSensorWaardeFoutiefResponsTerugAlsSensorNullIs() {
+		Respons respons = iotRestController.registreerMeting(null, 2.22);
+		assertEquals(ResponseCode.SENSOR_WAARDE_FOUTIEF, respons.getResponsCode());
+		assertEquals("Sensorwaarde is ongekend (null)", respons.getResponsString());
+	}
 }
