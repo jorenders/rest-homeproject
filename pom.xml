@@ -7,7 +7,6 @@
 	<artifactId>rest-homeproject</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
-
 	<name>rest-homeproject</name>
 	<description>Demo project for Spring Boot</description>
 
@@ -119,6 +118,11 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
-	    </plugins>
+			<plugin>
+          			<groupId>org.apache.maven.plugins</groupId>
+          			<artifactId>maven-surefire-plugin</artifactId>
+          			<version>3.0.0-M3</version>
+        		</plugin>
+	    	</plugins>
 	</build>
 </project>

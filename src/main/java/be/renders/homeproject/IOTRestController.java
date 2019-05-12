@@ -6,18 +6,10 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.ui.Model;
-import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.googlecode.charts4j.Color;
-import com.googlecode.charts4j.GCharts;
-import com.googlecode.charts4j.PieChart;
-import com.googlecode.charts4j.Slice;
 
 import be.renders.homeproject.domain.Configuratie;
 import be.renders.homeproject.domain.Meting;
@@ -27,27 +19,76 @@ import io.swagger.annotations.ApiOperation;
 public class IOTRestController {
 	
 	@Autowired
-	MetingRepository metingRepository;
+	HomeProjectRepository metingRepository;
 
 	@Autowired
 	ConfiguratieRepository configuratieRepository;
+	
+	@Autowired
+	AuthenticatieRepository authenticatieRepository;
 
 	Logger logger = LoggerFactory.getLogger(IOTRestController.class);
+	
+	@ApiOperation(value = "Koppel nieuwe module met basisStation")
+    @RequestMapping(value = "/koppelSensor", produces = "application/json", method = RequestMethod.GET)
+    public Respons registreerApparaat(@RequestParam(value="macAdres", defaultValue = "") String macAdres) {
+		Respons result = new Respons(ResponseCode.OK);
+		
+    	if (macAdres == null) {
+    		result = new Respons(ResponseCode.MACADRES_FOUTIEF, "Meetwaarde is ongekend (null)");
+    		return result;
+    	}
+    	
+    	if (ResponseCode.MODULE_NIET_GEKEND.equals(authenticatieRepository.checkModule(macAdres))) {
+    		logger.info("Nieuwe module koppelen");
+    		//TODO: later moet hier de GUI zorgen voor de toestemming voor het koppelen van de nieuwe Module
+    		//nu gaan we ervan uit dat goedkeuring OK is en dat we standaard koppelen.
+    		if (ResponseCode.OK.equals(authenticatieRepository.registreerNieuweModule(macAdres))) {
+    			logger.info("Nieuwe module is geregistreerd");
+    			result = new Respons(ResponseCode.MODULE_GEKEND);
+    	        return result;
+    		} else {
+    			logger.info("Fout gebeurd bij registreren nieuwe module");
+    			result = new Respons(ResponseCode.MODULE_KAN_NIET_WEGGESCHREVEN_WORDEN);
+    	        return result;
+    		}
+    	}
+    	
+    	return result;
+    }
 	
 	@ApiOperation(value = "Registreer een meting voor een bepaalde sensor")
     @RequestMapping(value = "/registreerMeting", produces = "application/json", method = RequestMethod.GET)
     public Respons registreerMeting(@RequestParam(value="sensor", defaultValue = "") Long sensor,
-    						@RequestParam(value="metingWaarde", defaultValue = "") Double metingWaarde) {    	
+    						@RequestParam(value="metingWaarde", defaultValue = "") Double metingWaarde,
+    						@RequestParam(value="macAdres", defaultValue = "") String macAdres) {
+		if (!ResponseCode.OK.equals(checkToegangSensor(macAdres).getResponsCode())) {
+			return new Respons(ResponseCode.MODULE_NIET_GEKEND, "Module is ongekend (null), fout bij authenticatie");
+		}
+		
     	if (sensor == null) {
     		return new Respons(ResponseCode.SENSOR_WAARDE_FOUTIEF, "Sensorwaarde is ongekend (null)");
     	} else if (metingWaarde == null) {
     		return new Respons(ResponseCode.MEETWAARDE_FOUTIEF, "Meetwaarde is ongekend (null)");
     	}
     	
+    	
     	ResponseCode responseCode = metingRepository.registreerMeting(sensor, metingWaarde);
     	Respons respons = new Respons(responseCode);
         return respons;
     }
+
+	private Respons checkToegangSensor(String macAdres) {
+		
+		Respons respons = new Respons(ResponseCode.OK);
+		ResponseCode responseCode = authenticatieRepository.checkModule(macAdres);
+		
+		if (!ResponseCode.MODULE_GEKEND.equals(responseCode)) {
+			respons.setResponsCode(responseCode);
+		}
+		
+		return respons;
+	}
     
 	@ApiOperation(value = "Registreer een nieuwe cofiguratie parameter")
     @RequestMapping(value = "/registreerConfiguratie", produces = "application/json", method = RequestMethod.GET)
@@ -98,7 +139,7 @@ public class IOTRestController {
 
 	@ApiOperation(value = "Sla logging op van sensor")
 	@RequestMapping(value = "/registreerLogging", produces = "application/json", method = RequestMethod.GET)
-	public Respons registreerLogging(@RequestParam(value="logging", defaultValue="") String logging) {
+	public Respons registreerLogging(@RequestParam(value="logging", defaultValue="[Null]") String logging) {
 		Respons respons = new Respons(ResponseCode.KAN_LOGGING_NIET_WEGSCHRIJVEN);
 		logger.info(logging);
 		respons.setResponsCode(ResponseCode.OK);
