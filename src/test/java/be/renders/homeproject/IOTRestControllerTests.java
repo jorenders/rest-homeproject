@@ -76,5 +76,49 @@ public class IOTRestControllerTests {
 		assertEquals("Module is ongekend (null), fout bij authenticatie", respons.getResponsString());
 	}
 
+	@Test
+	public void registreerApparaatGeeftOKTerugMetCorrectMACAdress() {
+		String macAdress = "0D-73-ED-0A-27-44";
+		doReturn(ResponseCode.MODULE_NIET_GEKEND).when(authenticatieRepository).checkModule(macAdress);
+		doReturn(ResponseCode.OK).when(authenticatieRepository).registreerNieuweModule(macAdress);
 
+		Respons respons = iotRestController.registreerApparaat(macAdress);
+
+		assertEquals(ResponseCode.OK, respons.getResponsCode());
+		assertEquals("succes", respons.getResponsString());
+	}
+
+	@Test
+	public void registreerApparaatGeeftFoutTerugMetCorrectMACAdressWegensProblemen() {
+		String macAdress = "0D-73-ED-0A-27-44";
+		doReturn(ResponseCode.MODULE_NIET_GEKEND).when(authenticatieRepository).checkModule(macAdress);
+		doReturn(ResponseCode.CONFIGURATIE_FOUTIEF).when(authenticatieRepository).registreerNieuweModule(macAdress);
+
+		Respons respons = iotRestController.registreerApparaat(macAdress);
+
+		assertEquals(ResponseCode.MODULE_KAN_NIET_WEGGESCHREVEN_WORDEN, respons.getResponsCode());
+		assertEquals("failed", respons.getResponsString());
+	}
+
+	@Test
+	public void registreerApparaatGeeftErrorTerugMetLeegMACAdress() {
+		String macAdress = null;
+
+		Respons respons = iotRestController.registreerApparaat(macAdress);
+
+		assertEquals(ResponseCode.MACADRES_FOUTIEF, respons.getResponsCode());
+		assertEquals("MAC Adres is ongekend (null)", respons.getResponsString());
+
+	}
+
+	@Test
+	public void registreerApparaatGeeftOKTerugMetGekendMACAdress() {
+		String macAdress = "0D-73-ED-0A-27-44";
+		doReturn(ResponseCode.OK).when(authenticatieRepository).checkModule(macAdress);
+
+		Respons respons = iotRestController.registreerApparaat(macAdress);
+
+		assertEquals(ResponseCode.OK, respons.getResponsCode());
+		assertEquals("succes", respons.getResponsString());
+	}
 }

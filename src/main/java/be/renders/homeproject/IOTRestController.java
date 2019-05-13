@@ -45,7 +45,7 @@ public class IOTRestController {
     		//nu gaan we ervan uit dat goedkeuring OK is en dat we standaard koppelen.
     		if (ResponseCode.OK.equals(authenticatieRepository.registreerNieuweModule(macAdres))) {
     			logger.info("Nieuwe module is geregistreerd");
-    			result = new Respons(ResponseCode.MODULE_GEKEND);
+    			result = new Respons(ResponseCode.OK);
     	        return result;
     		} else {
     			logger.info("Fout gebeurd bij registreren nieuwe module");
