@@ -28,7 +28,7 @@ pipeline {
     }
     stage('Archive Artifacts') {
       steps {
-        archiveArtifacts 'target/*.jar,target/*.tar,target/site/clover/*'
+        archiveArtifacts 'target/*.jar,target/*.tar,target/site/clover/**/*.*'
       }
     }
     stage('Delete workspace') {
