@@ -19,6 +19,9 @@ public class IOTRestControllerTests {
 	@Spy
 	private AuthenticatieRepository authenticatieRepository;
 
+	@Spy
+	private ConfiguratieRepository configuratieRepository;
+
 	@InjectMocks
 	private IOTRestController iotRestController;
 
@@ -120,5 +123,41 @@ public class IOTRestControllerTests {
 
 		assertEquals(ResponseCode.OK, respons.getResponsCode());
 		assertEquals("succes", respons.getResponsString());
+	}
+
+	@Test
+	public void registreerConfiguratieGeeftOKTerugAlsCorrecteParametersWordenDoorgegeven() {
+		String naam = "Temp Liv";
+		String waarde = "Temperatuur Living";
+		doReturn(ResponseCode.OK).when(configuratieRepository).registreerConfiguratie(naam.toUpperCase(), waarde.toUpperCase());
+
+		Respons respons = iotRestController.registreerConfiguratie(naam, waarde);
+
+		assertEquals(ResponseCode.OK, respons.getResponsCode());
+		assertEquals("succes", respons.getResponsString());
+	}
+
+	@Test
+	public void registreerConfiguratieGeeftNOKTerugAlsNaamOntbreekt() {
+		String naam = "";
+		String waarde = "Temperatuur Living";
+		doReturn(ResponseCode.OK).when(configuratieRepository).registreerConfiguratie(naam.toUpperCase(), waarde.toUpperCase());
+
+		Respons respons = iotRestController.registreerConfiguratie(naam, waarde);
+
+		assertEquals(ResponseCode.CONFIGURATIE_FOUTIEF, respons.getResponsCode());
+		assertEquals("Naam is verplicht mee te geven", respons.getResponsString());
+	}
+
+	@Test
+	public void registreerConfiguratieGeeftNOKTerugAlsWaardeOntbreekt() {
+		String naam = "Temp Liv";
+		String waarde = "";
+		doReturn(ResponseCode.OK).when(configuratieRepository).registreerConfiguratie(naam.toUpperCase(), waarde.toUpperCase());
+
+		Respons respons = iotRestController.registreerConfiguratie(naam, waarde);
+
+		assertEquals(ResponseCode.CONFIGURATIE_FOUTIEF, respons.getResponsCode());
+		assertEquals("Initiele waarde is verplicht bij elke configuratieparameter", respons.getResponsString());
 	}
 }
