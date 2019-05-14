@@ -144,7 +144,7 @@ public class IOTRestController {
 		Respons respons = new Respons(ResponseCode.KAN_LOGGING_NIET_WEGSCHRIJVEN);
 		logger.info(logging);
 		respons.setResponsCode(ResponseCode.OK);
-		respons.setResponsString("");
+		respons.setResponsString("succes");
 		return respons;
 	}
 }

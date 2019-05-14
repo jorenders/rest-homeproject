@@ -270,6 +270,13 @@ public class IOTRestControllerTests {
 		assertEquals(3, result.size());
 	}
 
+	@Test
+	public void registreerLoggingGeeftOKTerugWanneerLoggingIsWeggeschreven() {
+		Respons respons = iotRestController.registreerLogging("logging is de moeder van de porseleinenkast");
+		assertEquals(ResponseCode.OK, respons.getResponsCode());
+		assertEquals("succes", respons.getResponsString());
+	}
+
 
 
 	private Meting createMeting(long id, Timestamp datum, Long sensorSource, Double waarde) {
