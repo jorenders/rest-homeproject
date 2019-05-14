@@ -1,10 +1,14 @@
 package be.renders.homeproject;
 
+import be.renders.homeproject.domain.Configuratie;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.*;
 import org.mockito.runners.MockitoJUnitRunner;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.doReturn;
@@ -159,5 +163,70 @@ public class IOTRestControllerTests {
 
 		assertEquals(ResponseCode.CONFIGURATIE_FOUTIEF, respons.getResponsCode());
 		assertEquals("Initiele waarde is verplicht bij elke configuratieparameter", respons.getResponsString());
+	}
+
+	@Test
+	public void haalConfiguratieOpGeeftLijstTerug() {
+		List<Configuratie> configuraties = new ArrayList<Configuratie>();
+		Configuratie confA = new Configuratie();
+		confA.setId(1L);
+		confA.setNaam("Temp Liv");
+		confA.setValue("Temperatuur Living");
+		configuraties.add(confA);
+
+		doReturn(configuraties).when(configuratieRepository).haalOverzichtConfiguratieOp();
+
+		List<Configuratie> result = iotRestController.haalConfiguratieOp();
+
+		assertEquals(configuraties, result);
+	}
+
+	@Test
+	public void zoekSpecifiekeConfiguratieOpGeeftLijstTerug() {
+		String naam = "Temp Liv";
+		String waarde = "Temperatuur Living";
+		List<Configuratie> configuraties = new ArrayList<Configuratie>();
+		Configuratie confA = new Configuratie();
+		confA.setId(1L);
+		confA.setNaam(naam);
+		confA.setValue(waarde);
+		configuraties.add(confA);
+
+		doReturn(configuraties).when(configuratieRepository).zoekSpecifiekeConfiguratieOp(naam, waarde);
+
+		List<Configuratie> result = iotRestController.zoekSpecifiekeConfiguratieOp(naam, waarde);
+
+		assertEquals(configuraties, result);
+		assertEquals(1, result.size());
+	}
+
+	@Test
+	public void verwijderConfiguratieGeeftOKTerugIndienWaardeBestaat() {
+		String naam = "Temp Liv";
+		doReturn(ResponseCode.OK).when(configuratieRepository).verwijderSpecifiekeConfiguratieOp(naam);
+
+		Respons respons = iotRestController.verwijderConfiguratie(naam);
+		assertEquals(ResponseCode.OK, respons.getResponsCode());
+		assertEquals("succes", respons.getResponsString());
+	}
+
+	@Test
+	public void verwijderConfiguratieGeeftFoutTerugIndienWaardeNietBestaat() {
+		String naam = "Temp Liv2";
+		doReturn(ResponseCode.CONFIGURATIE_VERWIJDEREN_GEEN_RESULTAAT).when(configuratieRepository).verwijderSpecifiekeConfiguratieOp(naam);
+
+		Respons respons = iotRestController.verwijderConfiguratie(naam);
+		assertEquals(ResponseCode.CONFIGURATIE_VERWIJDEREN_GEEN_RESULTAAT, respons.getResponsCode());
+		assertEquals("failed", respons.getResponsString());
+	}
+
+	@Test
+	public void verwijderConfiguratieGeeftFoutTerugIndienWaardeMeedereKerenBestaatEnStringDusNietSpecifiekGenoegIs() {
+		String naam = "Temp";
+		doReturn(ResponseCode.CONFIGURATIE_VERWIJDEREN_MEER_DAN_EEN_RESULTAAT).when(configuratieRepository).verwijderSpecifiekeConfiguratieOp(naam);
+
+		Respons respons = iotRestController.verwijderConfiguratie(naam);
+		assertEquals(ResponseCode.CONFIGURATIE_VERWIJDEREN_MEER_DAN_EEN_RESULTAAT, respons.getResponsCode());
+		assertEquals("failed", respons.getResponsString());
 	}
 }
