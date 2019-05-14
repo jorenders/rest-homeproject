@@ -1,16 +1,22 @@
 package be.renders.homeproject;
 
 import be.renders.homeproject.domain.Configuratie;
+import be.renders.homeproject.domain.Meting;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.*;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import java.sql.Timestamp;
+import java.time.*;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Matchers.anyLong;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.when;
 
@@ -228,5 +234,50 @@ public class IOTRestControllerTests {
 		Respons respons = iotRestController.verwijderConfiguratie(naam);
 		assertEquals(ResponseCode.CONFIGURATIE_VERWIJDEREN_MEER_DAN_EEN_RESULTAAT, respons.getResponsCode());
 		assertEquals("failed", respons.getResponsString());
+	}
+
+	@Test
+	 public void haalMetingOpGeeftResultatenTerugVanDeLaatsteMinuut() {
+		Timestamp now = new Timestamp(LocalDate.now().atStartOfDay(ZoneOffset.UTC).toInstant().toEpochMilli());
+		long nowLong = now.getTime();
+		Meting meting1 = createMeting(0L, now, 123456L, 12.15);
+		Meting meting2 = createMeting(1L, now , 123416L, 18.15);
+		Meting meting3 = createMeting(2L,now , 122116L, 25.15);
+
+		List<Meting> metingen = new ArrayList<Meting>();
+		metingen.addAll(Arrays.asList(meting1, meting2, meting3));
+		doReturn(metingen).when(metingRepository).getMeting(nowLong);
+
+		List<Meting> result = iotRestController.haalMetingOp(nowLong, 0);
+		assertEquals(metingen, result);
+		assertEquals(3, result.size());
+	}
+
+	@Test
+	public void haalMetingOpGeeftResultatenTerugVanDeLaatsteMinuutStandaard() {
+		Timestamp now = new Timestamp(Instant.now().toEpochMilli());
+		long nowLong = now.getTime();
+		Meting meting1 = createMeting(0L, now, 123456L, 12.15);
+		Meting meting2 = createMeting(1L, now , 123416L, 18.15);
+		Meting meting3 = createMeting(2L,now , 122116L, 25.15);
+
+		List<Meting> metingen = new ArrayList<Meting>();
+		metingen.addAll(Arrays.asList(meting1, meting2, meting3));
+		doReturn(metingen).when(metingRepository).getMeting(anyLong());
+
+		List<Meting> result = iotRestController.haalMetingOp(0, 0);
+		assertEquals(metingen, result);
+		assertEquals(3, result.size());
+	}
+
+
+
+	private Meting createMeting(long id, Timestamp datum, Long sensorSource, Double waarde) {
+		Meting result = new Meting();
+		result.setId(id);
+		result.setDatum(datum);
+		result.setSensorsource(sensorSource);
+		result.setWaarde(waarde);
+		return result;
 	}
 }

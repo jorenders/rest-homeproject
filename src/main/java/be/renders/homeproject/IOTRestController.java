@@ -1,5 +1,6 @@
 package be.renders.homeproject;
 
+import java.time.Instant;
 import java.util.Date;
 import java.util.List;
 
@@ -131,7 +132,7 @@ public class IOTRestController {
     public List<Meting> haalMetingOp(@RequestParam(value="timestamp", defaultValue = "0") long miliseconds, 
     		@RequestParam(value="sensor", defaultValue="0") long sensor) {
     	if (miliseconds == 0) {
-    		miliseconds = new Date().getTime();
+    		miliseconds = Instant.now().toEpochMilli();//new Date().getTime();
     	}
     	List<Meting> metingen = metingRepository.getMeting(miliseconds);
         return metingen;
