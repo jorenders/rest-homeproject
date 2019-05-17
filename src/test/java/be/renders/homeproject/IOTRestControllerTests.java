@@ -1,7 +1,10 @@
 package be.renders.homeproject;
 
-import be.renders.homeproject.domain.Configuratie;
-import be.renders.homeproject.domain.Meting;
+import be.renders.homeproject.repository.AuthenticatieRepository;
+import be.renders.homeproject.repository.ConfiguratieRepository;
+import be.renders.homeproject.repository.HomeProjectRepository;
+import be.renders.homeproject.repository.domain.Configuratie;
+import be.renders.homeproject.repository.domain.Meting;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -12,13 +15,11 @@ import java.sql.Timestamp;
 import java.time.*;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.anyLong;
 import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class IOTRestControllerTests {

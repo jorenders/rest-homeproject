@@ -1,9 +1,11 @@
 package be.renders.homeproject;
 
 import java.time.Instant;
-import java.util.Date;
 import java.util.List;
 
+import be.renders.homeproject.repository.AuthenticatieRepository;
+import be.renders.homeproject.repository.ConfiguratieRepository;
+import be.renders.homeproject.repository.HomeProjectRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,8 +14,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import be.renders.homeproject.domain.Configuratie;
-import be.renders.homeproject.domain.Meting;
+import be.renders.homeproject.repository.domain.Configuratie;
+import be.renders.homeproject.repository.domain.Meting;
 import io.swagger.annotations.ApiOperation;
 
 @RestController
