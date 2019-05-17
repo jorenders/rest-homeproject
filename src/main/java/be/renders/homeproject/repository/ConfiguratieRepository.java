@@ -21,8 +21,7 @@ public class ConfiguratieRepository {
 	
 	@PersistenceContext
 	private EntityManager em;
-	
-	
+
 	@Transactional
 	public ResponseCode registreerConfiguratie(String naam, String value) {
 		Configuratie configuratie = new Configuratie();

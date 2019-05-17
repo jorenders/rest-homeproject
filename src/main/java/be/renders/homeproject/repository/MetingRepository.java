@@ -45,30 +45,6 @@ public class MetingRepository {
 		em.flush();
 		
 		return ResponseCode.OK;
-		
-		
-
-/*		int returnCode = jdbcTemplate.update(
-			    "INSERT INTO Metingen (datum, waarde, sensorSource) VALUES (?, ?, ?)",
-			    vandaag, sensorValue, sensorId);
-		if (returnCode == 1) {
-			return ResponseCode.OK; 
-		} else {
-			return ResponseCode.MEETWAARDE_FOUTIEF;
-		}	*/    		
-	}
-	
-	public ResponseCode storeSensorInfo(String sensorCode, String sensorOmschrijving) {
-		return null;
-		/*
-		int returnCode = jdbcTemplate.update(
-			    "INSERT INTO Sensoren (sensorCode ,sensorOmschrijving) VALUES (?, ?)",
-			    sensorCode, sensorOmschrijving);
-		if (returnCode == 1) {
-			return ResponseCode.OK; 
-		} else {
-			return ResponseCode.SENSOR_NIET_KUNNEN_OPSLAAN;
-		}*/	    		
 	}
 
 	public List<Meting> getMeting(long miliseconds) {
