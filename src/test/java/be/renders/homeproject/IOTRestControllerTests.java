@@ -241,9 +241,9 @@ public class IOTRestControllerTests {
 	 public void haalMetingOpGeeftResultatenTerugVanDeLaatsteMinuut() {
 		Timestamp now = new Timestamp(LocalDate.now().atStartOfDay(ZoneOffset.UTC).toInstant().toEpochMilli());
 		long nowLong = now.getTime();
-		Meting meting1 = createMeting(0L, now, 123456L, 12.15);
-		Meting meting2 = createMeting(1L, now , 123416L, 18.15);
-		Meting meting3 = createMeting(2L,now , 122116L, 25.15);
+		Meting meting1 = TestHelperClass.createMeting(0L, now, 123456L, 12.15);
+		Meting meting2 = TestHelperClass.createMeting(1L, now, 123416L, 18.15);
+		Meting meting3 = TestHelperClass.createMeting(2L, now, 122116L, 25.15);
 
 		List<Meting> metingen = new ArrayList<Meting>();
 		metingen.addAll(Arrays.asList(meting1, meting2, meting3));
@@ -258,9 +258,9 @@ public class IOTRestControllerTests {
 	public void haalMetingOpGeeftResultatenTerugVanDeLaatsteMinuutStandaard() {
 		Timestamp now = new Timestamp(Instant.now().toEpochMilli());
 		long nowLong = now.getTime();
-		Meting meting1 = createMeting(0L, now, 123456L, 12.15);
-		Meting meting2 = createMeting(1L, now , 123416L, 18.15);
-		Meting meting3 = createMeting(2L,now , 122116L, 25.15);
+		Meting meting1 = TestHelperClass.createMeting(0L, now, 123456L, 12.15);
+		Meting meting2 = TestHelperClass.createMeting(1L, now, 123416L, 18.15);
+		Meting meting3 = TestHelperClass.createMeting(2L, now, 122116L, 25.15);
 
 		List<Meting> metingen = new ArrayList<Meting>();
 		metingen.addAll(Arrays.asList(meting1, meting2, meting3));
@@ -276,16 +276,5 @@ public class IOTRestControllerTests {
 		Respons respons = iotRestController.registreerLogging("logging is de moeder van de porseleinenkast");
 		assertEquals(ResponseCode.OK, respons.getResponsCode());
 		assertEquals("succes", respons.getResponsString());
-	}
-
-
-
-	private Meting createMeting(long id, Timestamp datum, Long sensorSource, Double waarde) {
-		Meting result = new Meting();
-		result.setId(id);
-		result.setDatum(datum);
-		result.setSensorsource(sensorSource);
-		result.setWaarde(waarde);
-		return result;
 	}
 }
