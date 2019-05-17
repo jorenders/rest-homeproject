@@ -5,7 +5,6 @@ import java.util.List;
 
 import be.renders.homeproject.repository.AuthenticatieRepository;
 import be.renders.homeproject.repository.ConfiguratieRepository;
-import be.renders.homeproject.repository.HomeProjectRepository;
 import be.renders.homeproject.repository.MetingRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

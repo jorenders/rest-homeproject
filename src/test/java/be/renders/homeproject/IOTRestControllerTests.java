@@ -2,7 +2,6 @@ package be.renders.homeproject;
 
 import be.renders.homeproject.repository.AuthenticatieRepository;
 import be.renders.homeproject.repository.ConfiguratieRepository;
-import be.renders.homeproject.repository.HomeProjectRepository;
 import be.renders.homeproject.repository.MetingRepository;
 import be.renders.homeproject.repository.domain.Configuratie;
 import be.renders.homeproject.repository.domain.Meting;
