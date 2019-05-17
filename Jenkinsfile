@@ -22,45 +22,39 @@ pipeline {
         stage('Report Coverage') {
           steps {
             bat 'mvn clean clover:setup verify clover:aggregate clover:clover'
-
             step([
-                $class: 'CloverPublisher',
-                cloverReportDir: 'target/site',
-                cloverReportFileName: 'clover.xml',
-                healthyTarget: [methodCoverage: 70, conditionalCoverage: 80, statementCoverage: 80], // optional, default is: method=70, conditional=80, statement=80
-                unhealthyTarget: [methodCoverage: 50, conditionalCoverage: 50, statementCoverage: 50], // optional, default is none
-                failingTarget: [methodCoverage: 0, conditionalCoverage: 0, statementCoverage: 0]     // optional, default is none
-              ])
+                              $class: 'CloverPublisher',
+                              cloverReportDir: 'target/site',
+                              cloverReportFileName: 'clover.xml',
+                              healthyTarget: [methodCoverage: 70, conditionalCoverage: 80, statementCoverage: 80], // optional, default is: method=70, conditional=80, statement=80
+                              unhealthyTarget: [methodCoverage: 50, conditionalCoverage: 50, statementCoverage: 50], // optional, default is none
+                              failingTarget: [methodCoverage: 0, conditionalCoverage: 0, statementCoverage: 0]     // optional, default is none
+                            ])
+            }
           }
         }
       }
-    }
-    stage('Archive Artifacts') {
-      steps {
-        archiveArtifacts 'target/*.jar,target/*.tar,target/site/clover/**/*.*'
+      stage('Archive Artifacts') {
+        steps {
+          archiveArtifacts 'target/*.jar,target/*.tar,target/site/clover/**/*.*'
+        }
       }
     }
-    stage('Delete workspace') {
-      steps {
-        cleanWs(deleteDirs: true)
+    post {
+      success {
+        mail(subject: 'Jenkins build SUCCESS', from: 'desktop-renders@jenkins.com', to: 'jo.renders@gmail.com', body: 'Er is succesvolle build gerund')
+
       }
+
+      unstable {
+        mail(subject: 'Jenkins build UNSTABLE', from: 'desktop-renders@jenkins.com', to: 'jo.renders@gmail.com', body: 'Er is onstabiele build gerund')
+
+      }
+
+      failure {
+        mail(subject: 'Jenkins build ERROR', from: 'desktop-renders@jenkins.com', to: 'jo.renders@gmail.com', body: 'Er is blocking error in de build')
+
+      }
+
     }
   }
-  post {
-    success {
-      mail(subject: 'Jenkins build SUCCESS', from: 'desktop-renders@jenkins.com', to: 'jo.renders@gmail.com', body: 'Er is succesvolle build gerund')
-
-    }
-
-    unstable {
-      mail(subject: 'Jenkins build UNSTABLE', from: 'desktop-renders@jenkins.com', to: 'jo.renders@gmail.com', body: 'Er is onstabiele build gerund')
-
-    }
-
-    failure {
-      mail(subject: 'Jenkins build ERROR', from: 'desktop-renders@jenkins.com', to: 'jo.renders@gmail.com', body: 'Er is blocking error in de build')
-
-    }
-
-  }
-}
