@@ -32,7 +32,7 @@ public class AuthenticatieRepository {
 		} else if (aantal == 0) {
 			return ResponseCode.MODULE_NIET_GEKEND;
 		}
-		return ResponseCode.MODULE_KAN_NIET_WEGGESCHREVEN_WORDEN;
+		return ResponseCode.MODULE_DUBBEL_GEREGISTREERD;
 	}
 	
 	@Transactional
