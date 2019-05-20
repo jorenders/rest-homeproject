@@ -1,5 +1,6 @@
 package be.renders.homeproject;
 
+import be.renders.homeproject.repository.domain.Configuratie;
 import be.renders.homeproject.repository.domain.Meting;
 
 import java.sql.Timestamp;
@@ -16,5 +17,13 @@ public class TestHelperClass {
         result.setSensorsource(sensorSource);
         result.setWaarde(waarde);
         return result;
+    }
+
+    public static Configuratie createConfiguratie(long id, String value, String naam) {
+        Configuratie configuratie = new Configuratie();
+        configuratie.setId(id);
+        configuratie.setValue(value);
+        configuratie.setNaam(naam);
+        return configuratie;
     }
 }
