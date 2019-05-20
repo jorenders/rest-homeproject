@@ -81,4 +81,52 @@ public class ConfiguratieRepositoryTest {
         assertEquals(1, result.size());
         assertEquals(configuratie1, result.get(0));
     }
+
+    @Test
+         public void verwijderSpecifiekeConfiguratieOpVerwijderdAlleConfiguratiesMetNaamX() {
+        List<Configuratie> configuraties = new ArrayList<Configuratie>();
+        Configuratie configuratie1 = TestHelperClass.createConfiguratie(1L, "value1", "naam1");
+        Configuratie configuratie2 = TestHelperClass.createConfiguratie(2L, "value2", "naam2");
+
+        configuraties.addAll(Arrays.asList(configuratie1, configuratie2));
+
+        Query query = mock(Query.class);
+        doReturn(query).when(em).createQuery(anyString());
+        doReturn(Arrays.asList(configuratie1)).when(query).getResultList();
+
+        ResponseCode result = configuratieRepository.verwijderSpecifiekeConfiguratieOp("naam1");
+        assertEquals(result, ResponseCode.OK);
+    }
+
+    @Test
+    public void verwijderSpecifiekeConfiguratieOpMetNaamXGeeftFoutIndien2RecordsInAanmerkingKomen() {
+        List<Configuratie> configuraties = new ArrayList<Configuratie>();
+        Configuratie configuratie1 = TestHelperClass.createConfiguratie(1L, "value1", "naam1");
+        Configuratie configuratie2 = TestHelperClass.createConfiguratie(2L, "value2", "naam1");
+
+        configuraties.addAll(Arrays.asList(configuratie1, configuratie2));
+
+        Query query = mock(Query.class);
+        doReturn(query).when(em).createQuery(anyString());
+        doReturn(Arrays.asList(configuratie1, configuratie2)).when(query).getResultList();
+
+        ResponseCode result = configuratieRepository.verwijderSpecifiekeConfiguratieOp("naam1");
+        assertEquals(result, ResponseCode.CONFIGURATIE_VERWIJDEREN_MEER_DAN_EEN_RESULTAAT);
+    }
+
+    @Test
+    public void verwijderSpecifiekeConfiguratieOpMetNaamXGeeftFoutIndienGeenRecordsInAanmerkingKomen() {
+        List<Configuratie> configuraties = new ArrayList<Configuratie>();
+        Configuratie configuratie1 = TestHelperClass.createConfiguratie(1L, "value1", "naam1");
+        Configuratie configuratie2 = TestHelperClass.createConfiguratie(2L, "value2", "naam1");
+
+        configuraties.addAll(Arrays.asList(configuratie1, configuratie2));
+
+        Query query = mock(Query.class);
+        doReturn(query).when(em).createQuery(anyString());
+        doReturn(Arrays.asList()).when(query).getResultList();
+
+        ResponseCode result = configuratieRepository.verwijderSpecifiekeConfiguratieOp("naam3");
+        assertEquals(result, ResponseCode.CONFIGURATIE_VERWIJDEREN_GEEN_RESULTAAT);
+    }
 }
