@@ -12,14 +12,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class IOTGuiController {
+
     @Autowired
     MetingRepository metingRepository;
 
+    //Werkt maar comments weghalen
+/*
     @GetMapping("/grafiekTemperatuur")
     public String greeting(@RequestParam(name = "name", required = false, defaultValue = "World") String name, Model model) {
 
-        //Werkt maar return null weghalen
-        /*model.addAttribute("name", name);
+        model.addAttribute("name", name);
         
         //List<Meting> metingen = metingRepository.getMeting(new Date().getTime());
         //model.addAttribute("metingen", metingen);
@@ -45,9 +47,8 @@ public class IOTGuiController {
         
         model.addAttribute("linedata", linedata.toString());
         
-        return "grafiekTemperatuur";*/
-        return null;
-    }
+        return "grafiekTemperatuur";
+    }*/
 	
 	/*@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String landingPage(ModelMap model)
