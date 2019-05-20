@@ -64,4 +64,21 @@ public class ConfiguratieRepositoryTest {
         List<Configuratie> result = configuratieRepository.haalOverzichtConfiguratieOp();
         assertEquals(configuraties, result);
     }
+
+    @Test
+    public void zoekSpecifiekeConfiguratieOpGeeftConfiguratieTerug() {
+        List<Configuratie> configuraties = new ArrayList<Configuratie>();
+        Configuratie configuratie1 = TestHelperClass.createConfiguratie(1L, "value1", "naam1");
+        Configuratie configuratie2 = TestHelperClass.createConfiguratie(2L, "value2", "naam2");
+
+        configuraties.addAll(Arrays.asList(configuratie1, configuratie2));
+
+        Query query = mock(Query.class);
+        doReturn(query).when(em).createQuery(anyString());
+        doReturn(Arrays.asList(configuratie1)).when(query).getResultList();
+
+        List<Configuratie> result = configuratieRepository.zoekSpecifiekeConfiguratieOp("value1","naam1");
+        assertEquals(1, result.size());
+        assertEquals(configuratie1, result.get(0));
+    }
 }
