@@ -2,7 +2,7 @@ package be.renders.homeproject.repository;
 
 import be.renders.homeproject.ResponseCode;
 import be.renders.homeproject.TestHelperClass;
-import be.renders.homeproject.repository.domain.Meting;
+import be.renders.homeproject.repository.domain.Metingen.Meting;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
@@ -21,7 +21,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Matchers.anyObject;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;

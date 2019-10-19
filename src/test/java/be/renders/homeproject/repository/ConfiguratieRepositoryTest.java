@@ -2,7 +2,7 @@ package be.renders.homeproject.repository;
 
 import be.renders.homeproject.ResponseCode;
 import be.renders.homeproject.TestHelperClass;
-import be.renders.homeproject.repository.domain.Configuratie;
+import be.renders.homeproject.repository.domain.Configuratie.Configuratie;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;

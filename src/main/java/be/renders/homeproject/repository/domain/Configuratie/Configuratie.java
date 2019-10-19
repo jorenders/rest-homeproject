@@ -1,4 +1,4 @@
-package be.renders.homeproject.repository.domain;
+package be.renders.homeproject.repository.domain.Configuratie;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

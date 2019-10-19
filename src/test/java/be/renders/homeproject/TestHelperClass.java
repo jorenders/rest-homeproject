@@ -1,7 +1,7 @@
 package be.renders.homeproject;
 
-import be.renders.homeproject.repository.domain.Configuratie;
-import be.renders.homeproject.repository.domain.Meting;
+import be.renders.homeproject.repository.domain.Configuratie.Configuratie;
+import be.renders.homeproject.repository.domain.Metingen.Meting;
 
 import java.sql.Timestamp;
 

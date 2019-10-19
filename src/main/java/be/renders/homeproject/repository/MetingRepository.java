@@ -13,7 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import be.renders.homeproject.repository.domain.Meting;
+import be.renders.homeproject.repository.domain.Metingen.Meting;
 
 @Repository
 public class MetingRepository {

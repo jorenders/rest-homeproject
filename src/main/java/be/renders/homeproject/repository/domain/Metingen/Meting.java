@@ -1,4 +1,4 @@
-package be.renders.homeproject.repository.domain;
+package be.renders.homeproject.repository.domain.Metingen;
 
 import java.sql.Timestamp;
 

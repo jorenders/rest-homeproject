@@ -2,10 +2,14 @@ package be.renders.homeproject;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.concurrent.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import be.renders.homeproject.repository.AuthenticatieRepository;
 import be.renders.homeproject.repository.ConfiguratieRepository;
 import be.renders.homeproject.repository.MetingRepository;
+import com.fasterxml.jackson.core.JsonParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,9 +18,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import be.renders.homeproject.repository.domain.Configuratie;
-import be.renders.homeproject.repository.domain.Meting;
+import be.renders.homeproject.repository.domain.Configuratie.Configuratie;
+import be.renders.homeproject.repository.domain.Metingen.Meting;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.web.client.RestTemplate;
 
 @RestController
 public class IOTRestController {
@@ -31,7 +36,16 @@ public class IOTRestController {
 	AuthenticatieRepository authenticatieRepository;
 
 	Logger logger = LoggerFactory.getLogger(IOTRestController.class);
-	
+
+	public IOTRestController() {
+		ScheduledExecutorService execService = Executors.newScheduledThreadPool(5);
+		execService.scheduleAtFixedRate(()->{
+			//The repetitive task, say to update Database
+			String result = haalVerbruikAircoOp(null);
+		}, 0, 600L, TimeUnit.SECONDS);
+
+	}
+
 	@ApiOperation(value = "Koppel nieuwe module met basisStation")
     @RequestMapping(value = "/koppelSensor", produces = "application/json", method = RequestMethod.GET)
     public Respons registreerApparaat(@RequestParam(value="macAdres", defaultValue = "") String macAdres) {
@@ -148,5 +162,18 @@ public class IOTRestController {
 		respons.setResponsCode(ResponseCode.OK);
 		respons.setResponsString("succes");
 		return respons;
+	}
+
+	@ApiOperation(value = "Haal vebruik airco op")
+	@RequestMapping(value = "/haalVerbruikAircoOp", produces = "application/json", method = RequestMethod.GET)
+	public String haalVerbruikAircoOp(@RequestParam(value="logging", defaultValue="[Null]") String logging) {
+		RestTemplate restTemplate = new RestTemplate();
+		String result = restTemplate.getForObject("http://192.168.1.104/aircon/get_day_power_ex", String.class);
+
+		List<String> convertedResultList = Stream.of(result.split(",", -1))
+				.collect(Collectors.toList());
+
+		System.out.println(convertedResultList);
+		return result;
 	}
 }

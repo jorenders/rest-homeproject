@@ -12,7 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import be.renders.homeproject.repository.domain.Configuratie;
+import be.renders.homeproject.repository.domain.Configuratie.Configuratie;
 
 @Repository
 public class ConfiguratieRepository {
